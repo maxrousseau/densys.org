@@ -43,6 +43,6 @@ The project is licensed under the MIT license.
 
 Contact
 -------
-Maxime Rousseau, DMD II McGill University, Faculty of Dentistry
+Maxime Rousseau, DMD III McGill University, Faculty of Dentistry
 - Email: <maximerousseau08@gmail.com>
 
