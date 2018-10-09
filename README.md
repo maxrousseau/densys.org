@@ -28,6 +28,11 @@ Under development.
 Contribute
 ----------
 
+Use conda to reproduce the development environment:
+```sh
+conda env create -f environment.yml
+```
+
 -   Refer to the contribution guidelines: <https://github.com/maxrousseau/flask-pfla/blob/master/contributing.md> 
 -   Issue Tracker: <https://github.com/maxrousseau/flask-pfla/issues>
 -   Source Code: <https://github.com/maxrousseau/flask-pfla>
