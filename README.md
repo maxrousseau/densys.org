@@ -1,5 +1,5 @@
-pfla: Python Facial Landmark Analysis
-=====================================
+Flask-PFLA
+==========
 
 This web applications aims at making the analyses from the [pfla
 package](<https://github.com/maxrousseau/flask-pfla) accessible and easy to use
@@ -9,14 +9,17 @@ Requirements and Dependencies
 -----------------------------
 
 -   Python 3.5
--   Python packages: opencv-python, dlib, imutils, numpy, argparse, pandas, rpy2, progress
+-   Python packages: opencv-python, dlib, numpy 
 -   Linux operating system
--   R 3.3 (or more recent)
--   R packages: shapes, foreach
 
 Testing
 -------
-Under development.
+
+To run all tests, enter the following in the cloned directory:
+
+```shell
+pytest 
+```
 
 Documentation
 -------------
