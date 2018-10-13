@@ -76,10 +76,10 @@ class Job(object):
         }
         self.confidence = 0.7
 
-    def med(self):
-        """Executes the Mean Euclidean Distance analysis"""
-
-        return result
+#    def med(self):
+#        """Executes the Mean Euclidean Distance analysis"""
+#
+#        return result
 
     def ratio1(self):
         """Computes the value of ratio 1"""
@@ -247,7 +247,8 @@ class Job(object):
 
         # run analysis functions
         if self.json_obj["task"] == "asym":
-            self.asym(ldmk_coords)
+            asym_result = self.asym(ldmk_coords)
+            result_str = str(asym_result)
 
         elif self.json_obj["task"] == "lfh":
             self.lfh()
@@ -268,13 +269,11 @@ class Job(object):
             print("[ERROR] TASK DOES NOT EXIST")
             print("[INFO] cancelling job")
 
-
-
         # write results to 
         if not os.path.isfile(self.paths["joblist"]):
             with open(self.paths["joblist"], "w") as outfile:
                 json.dump(self.json_obj, outfile)
 
-        return result_int
+        return result_str
 
 

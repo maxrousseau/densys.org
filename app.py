@@ -15,9 +15,13 @@ jobs = [
         'id' : 1,
         'analysis' : 'asym',
         'image' : None,
-        'complete' : False
+        'complete' : False,
+        'result' : ''
     }
 ]
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.',1)[1].lower() in allowed_extensions
 
 def make_public_job(job):
     new_job = {}
@@ -29,14 +33,60 @@ def make_public_job(job):
     return new_job
 
 
+@app.route('/api/v0.0/analysis', methods=['GET', 'POST'])
+def run_analysis(image, task):
+    """Create a job and call analysis
+    This method will create a job object and call the analysis on the
+    uploaded image
+
+    Parameters
+    ----------
+    image : path
+        path to the uploaded image
+    task : string
+        type of analysis to be run on the uploaded image
+
+    Returns
+    ------
+    result : string
+        result from the anlysis in question
+    """
+    new_job = job.Job(image, task)
+    result = new_job.execute()
+    hash_id = new_job.json_obj['hash']
+    return result, hash_id
+
 # get list of jobs
 @app.route('/api/v0.0/jobs', methods=['GET'])
 def get_jobs():
+    """list current jobs
+    This method will list the current jobs as JSON format
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    ------
+    jobs : JSON object
+    """
     return jsonify({'jobs':[make_public_job(job) for job in jobs]})
 
 # get a specific job 
 @app.route('/api/v0.0/jobs/<int:job_id>', methods=['GET'])
 def get_job(job_id):
+    """fetch a specific job
+    This method will fetch a specific job from the job list
+
+    Parameters
+    ----------
+    job_id : int
+        identifier of the job being fetched
+
+    Returns
+    ------
+    job : JSON entry
+    """
     job = [job for job in jobs if job['id'] == job_id]
     if len(job) == 0:
         abort(404)
@@ -45,10 +95,21 @@ def get_job(job_id):
 # improved error message
 @app.errorhandler(404)
 def not_found(error):
+    """error handle
+    Returns an error message
+
+    Parameters
+    ----------
+    error : string
+
+    Returns
+    ------
+    make_response : JSON entry
+    """
     return make_response(jsonify({'error':'Not found'}), 404)
 
 # post a new job
-@app.route('/api/v0.0/jobs/', methods=['POST'])
+@app.route('/api/v0.0/jobs/new', methods=['POST'])
 def create_job():
     if not request.json or not 'analysis' in request.json:
         abort(400)
@@ -63,7 +124,7 @@ def create_job():
     jobs.append(job)
     return jsonify({'job':job}), 201
 
-@app.route('/api/v0.0/jobs/', methods=['GET', 'POST'])
+@app.route('/api/v0.0/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -76,7 +137,7 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['upload_folder'], filename))
-            return 'successful upload', redirect(url_for('uploaded_file', filename=filename))
+            return redirect(url_for('uploaded_file', filename=filename))
 
     return '''
     <!doctype html>
@@ -87,6 +148,9 @@ def upload_file():
     <input type=submit value=Upload>
     </form>
     '''
+@app.route('/api/v0.0/uploaded_file', methods=['GET'])
+def uploaded_file():
+    return 'success'
 
 # update job completion status
 @app.route('/api/v0.0/jobs/<int:job_id>', methods=['PUT'])
