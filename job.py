@@ -7,6 +7,7 @@ import json
 import cv2
 import dlib
 import numpy as np
+import linear as ln
 
 class Job(object):
     """This class will act as a controller for the analysis pushed to the api"""
@@ -65,6 +66,12 @@ class Job(object):
             "is_complete" : self.is_complete,
             "face_coord" : [],
             "ldmk_coord" : [],
+            "asym" : 0,
+            "lfh" : 0,
+            "med" : 0,
+            "ratio1" : 0,
+            "ratio2" : 0,
+            "ratio3" : 0,
             "result" : 0
         }
         self.confidence = 0.7
@@ -94,11 +101,67 @@ class Job(object):
 
         return result
 
-    def asym(self):
+    def asym(self, coords):
         """Compute the asymmetry index"""
-        print("this ran")
+        # begin by computing f(x) for the midline
+        nasion_x = np.array([coords["X9"]])
+        nasion_y = np.array([coords["Y9"]])
+        menton_x = np.array([coords["X28"]])
+        menton_y = np.array([coords["Y28"]])
+        midline = ln.Linear(nasion_x, nasion_y, menton_x, menton_y)
 
-        return 0
+        # compute f(x) R-L for corresponding landmarks
+        corrsp_ax = np.array([coords["X1"], coords["X2"], coords["X3"],
+                              coords["X4"], coords["X5"], coords["X6"],
+                              coords["X7"], coords["X8"], coords["X18"],
+                              coords["X19"], coords["X20"], coords["X21"],
+                              coords["X22"], coords["X32"], coords["X33"],
+                              coords["X37"], coords["X38"], coords["X39"],
+                              coords["X40"], coords["X41"], coords["X42"]])
+
+        corrsp_ay = np.array([coords["Y1"], coords["Y2"], coords["Y3"],
+                              coords["Y4"], coords["Y5"], coords["Y6"],
+                              coords["Y7"], coords["Y8"], coords["Y18"],
+                              coords["Y19"], coords["Y20"], coords["Y21"],
+                              coords["Y22"], coords["Y32"], coords["Y33"],
+                              coords["Y37"], coords["Y38"], coords["Y39"],
+                              coords["Y40"], coords["Y41"], coords["Y42"]])
+
+        corrsp_bx = np.array([coords["X17"], coords["X16"], coords["X15"],
+                              coords["X14"], coords["X13"], coords["X12"],
+                              coords["X11"], coords["X10"], coords["X27"],
+                              coords["X26"], coords["X25"], coords["X24"],
+                              coords["X23"], coords["X36"], coords["X35"],
+                              coords["X46"], coords["X45"], coords["X44"],
+                              coords["X43"], coords["X48"], coords["X47"]])
+
+        corrsp_by = np.array([coords["Y17"], coords["Y16"], coords["Y15"],
+                              coords["Y14"], coords["Y13"], coords["Y12"],
+                              coords["Y11"], coords["Y10"], coords["Y27"],
+                              coords["Y26"], coords["Y25"], coords["Y24"],
+                              coords["Y23"], coords["Y36"], coords["Y35"],
+                              coords["Y46"], coords["Y45"], coords["Y44"],
+                              coords["Y43"], coords["Y48"], coords["Y47"]])
+
+        lin_func = ln.Linear(corrsp_ax, corrsp_ay, corrsp_bx, corrsp_by)
+
+        # compute the coordinates of the origins (O)
+        origin_x, origin_y = lin_func.solve(midline.slope, midline.constant)
+
+
+        # compute distance RO and LO
+        distances_a = lin_func.euc_dist(corrsp_ax, corrsp_ay, origin_x, origin_y)
+        distances_b = lin_func.euc_dist(corrsp_bx, corrsp_by, origin_x, origin_y)
+
+        # compute absolute difference RO - LO
+        diff_ab = distances_a - distances_b
+        abs_diff = np.absolute(diff_ab)
+
+        # sum of absolute differences
+        sum_diff = np.sum(abs_diff)
+        self.json_obj["asym"] = sum_diff
+
+        return sum_diff
 
     def execute(self):
         """Method creating a new job entry to be saved in joblist.json
@@ -184,7 +247,7 @@ class Job(object):
 
         # run analysis functions
         if self.json_obj["task"] == "asym":
-            self.asym()
+            self.asym(ldmk_coords)
 
         elif self.json_obj["task"] == "lfh":
             self.lfh()

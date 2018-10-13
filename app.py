@@ -1,6 +1,23 @@
-from flask import Flask, jsonify, abort, make_response, request, url_for
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+from flask import Flask, flash, jsonify, abort, make_response, request
+from flask import url_for, redirect
+from werkzeug.utils import secure_filename
+import job
+import os
 
+upload_folder = os.path.abspath('./uploads')
+allowed_extensions = set(['png', 'jpg', 'jpeg'])
 app = Flask(__name__)
+app.config['upload_folder'] = upload_folder
+jobs = [
+    {
+        'id' : 1,
+        'analysis' : 'asym',
+        'image' : None,
+        'complete' : False
+    }
+]
 
 def make_public_job(job):
     new_job = {}
@@ -11,19 +28,6 @@ def make_public_job(job):
             new_job[field] = job[field]
     return new_job
 
-jobs = [
-    {
-        'id':0,
-        'analysis':'asymmetry',
-        'complete':False
-    },
-    {
-        'id':1,
-        'analysis':'diagnosis',
-        'complete':False
-    }
-
-]
 
 # get list of jobs
 @app.route('/api/v0.0/jobs', methods=['GET'])
@@ -48,13 +52,41 @@ def not_found(error):
 def create_job():
     if not request.json or not 'analysis' in request.json:
         abort(400)
+
     job = {
         'id':jobs[-1]['id']+1,
         'analysis':request.json['analysis'],
+        'image': None,
         'complete':False
     }
+
     jobs.append(job)
     return jsonify({'job':job}), 201
+
+@app.route('/api/v0.0/jobs/', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['upload_folder'], filename))
+            return 'successful upload', redirect(url_for('uploaded_file', filename=filename))
+
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+    <input type=file name=file>
+    <input type=submit value=Upload>
+    </form>
+    '''
 
 # update job completion status
 @app.route('/api/v0.0/jobs/<int:job_id>', methods=['PUT'])
