@@ -39,7 +39,8 @@ conda env create -f environment.yml
 
 TODO
 ----
-- [ ] complete all analysis functions
+- [x] complete all analysis functions
+- [ ] draw, save and display resulting image
 - [ ] tests for jobs.py, app.py and linear.py
 - [ ] documentation generation with sphinx and RTD hosting
 - [ ] front end reactJS
