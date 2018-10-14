@@ -12,7 +12,8 @@ To access a specific job (i.e. job_id = 3):
 ```sh
 curl http://127.0.0.1:5000/api/v0.0/jobs/<int:job_id> 
 ```
-To create a new job and run an analysis:
+To create a new job and run an analysis ```["asym", "lfh", "ratio1", "ratio2",
+ratio3"]```:
 ```sh
 curl -i -H Content-Type: application/json -X POST -d {"analysis":"asym",
 "image":"lena.jpg"} http://127.0.0.1:5000/api/v0.0/jobs/new

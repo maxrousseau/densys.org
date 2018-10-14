@@ -81,28 +81,114 @@ class Job(object):
 #
 #        return result
 
-    def ratio1(self):
-        """Computes the value of ratio 1"""
+    def ratio1(self, coords):
+        """Computes the value of ratio 1
+        This method will compute first facial ratio (37-46/1-17)
 
-        return result
+        Parameters
+        ----------
+        coords : numpy array
+            coordinates of the 68 landmarks
 
-    def ratio2(self):
-        """Computes the value of ratio 2"""
+        Returns
+        ------
+        ratio1_res : int
+            result from the computation of the first ratio
+        """
+        bitemp_dist = ln.Linear.euc_dist(self, coords["X1"], coords["Y1"],
+                                      coords["X17"], coords["Y17"])
+        bioc_dist = ln.Linear.euc_dist(self, coords["X37"], coords["Y37"],
+                                      coords["X46"], coords["Y46"])
+        ratio1_res = bioc_dist / bitemp_dist
+        self.json_obj["ratio1"] = ratio1_res
 
-        return result
+        return ratio1_res
 
-    def ratio3(self):
-        """Computes the value of ratio 3"""
+    def ratio2(self, coords):
+        """Computes the value of ratio 2
+        This method will compute second facial ratio (5-13/1-17)
 
-        return result
+        Parameters
+        ----------
+        coords : numpy array
+            coordinates of the 68 landmarks
 
-    def lfh(self):
-        """Computes the lower face height"""
+        Returns
+        ------
+        ratio1_res : int
+            result from the computation of the first ratio
+        """
+        bitemp_dist = ln.Linear.euc_dist(self, coords["X1"], coords["Y1"],
+                                      coords["X17"], coords["Y17"])
+        bimand_dist = ln.Linear.euc_dist(self, coords["X5"], coords["Y5"],
+                                      coords["X13"], coords["Y13"])
+        ratio2_res = bimand_dist / bitemp_dist
+        self.json_obj["ratio2"] = ratio2_res
 
-        return result
+        return ratio2_res
+
+    def ratio3(self, coords):
+        """Computes the value of ratio 3
+        This method will compute third facial ratio (28-9/1-17)
+
+        Parameters
+        ----------
+        coords : numpy array
+            coordinates of the 68 landmarks
+
+        Returns
+        ------
+        ratio3_res : int
+            result from the computation of the third ratio
+        """
+        bitemp_dist = ln.Linear.euc_dist(self, coords["X1"], coords["Y1"],
+                                      coords["X17"], coords["Y17"])
+        face_height = ln.Linear.euc_dist(self, coords["X28"], coords["Y28"],
+                                      coords["X9"], coords["Y9"])
+        ratio3_res = face_height / bitemp_dist
+        self.json_obj["ratio3"] = ratio3_res
+
+        return ratio3_res
+
+    def lfh(self, coords):
+        """Computes the lower face height
+        This method will computes the lower face height (34-9/28-9)
+
+        Parameters
+        ----------
+        coords : numpy array
+            coordinates of the 68 landmarks
+
+        Returns
+        ------
+       lfw_res : int
+            result from the computation of the lower face height
+        """
+        lower_face = ln.Linear.euc_dist(self, coords["X34"], coords["Y34"],
+                                      coords["X9"], coords["Y9"])
+        face_height = ln.Linear.euc_dist(self, coords["X28"], coords["Y28"],
+                                      coords["X9"], coords["Y9"])
+        lfw_res = lower_face / face_height
+        self.json_obj["lfh"] = lfw_res
+
+        return lfw_res
+
 
     def asym(self, coords):
-        """Compute the asymmetry index"""
+        """Compute the asymmetry index
+        This method will compute the asymmetry index by comparing corresponding
+        landmark distances to the facial midline (nasion - menton).
+
+        Parameters
+        ----------
+        coords : numpy array
+            coordinates of the 60 landmarks
+
+        Returns
+        ------
+        sum_diff : int
+            sum of the differences from the coordinates
+        """
         # begin by computing f(x) for the midline
         nasion_x = np.array([coords["X9"]])
         nasion_y = np.array([coords["Y9"]])
@@ -251,19 +337,23 @@ class Job(object):
             result_str = str(asym_result)
 
         elif self.json_obj["task"] == "lfh":
-            self.lfh()
+            lfh_result = self.lfh(ldmk_coords)
+            result_str = str(lfh_result)
 
-        elif self.json_obj["task"] == "med":
-            self.med()
+#        elif self.json_obj["task"] == "med":
+#           None
 
         elif self.json_obj["task"] == "ratio1":
-            self.ratio1()
+            ratio1_result = self.ratio1(ldmk_coords)
+            result_str = str(ratio1_result)
 
         elif self.json_obj["task"] == "ratio2":
-            self.ratio2()
+            ratio2_result = self.ratio2(ldmk_coords)
+            result_str = str(ratio2_result)
 
         elif self.json_obj["task"] == "ratio3":
-            self.ratio3()
+            ratio3_result = self.ratio3(ldmk_coords)
+            result_str = str(ratio3_result)
 
         else:
             print("[ERROR] TASK DOES NOT EXIST")
