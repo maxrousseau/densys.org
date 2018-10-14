@@ -37,6 +37,15 @@ conda env create -f environment.yml
 -   Issue Tracker: <https://github.com/maxrousseau/flask-pfla/issues>
 -   Source Code: <https://github.com/maxrousseau/flask-pfla>
 
+TODO
+----
+- [ ] complete all analysis functions
+- [ ] tests for jobs.py, app.py and linear.py
+- [ ] documentation generation with sphinx and RTD hosting
+- [ ] front end reactJS
+- [ ] travisCI 
+- [ ] deployment on heroku
+
 License
 -------
 The project is licensed under the MIT license.

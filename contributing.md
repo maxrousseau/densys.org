@@ -1,6 +1,23 @@
 # How to contribute
 
 
+## Useful curl commands
+These will be useful when developing for the flask api. 
+
+To list all current jobs:
+```sh
+curl http://127.0.0.1:5000/api/v0.0/jobs
+```
+To access a specific job (i.e. job_id = 3):
+```sh
+curl http://127.0.0.1:5000/api/v0.0/jobs/<int:job_id> 
+```
+To create a new job and run an analysis:
+```sh
+curl -i -H Content-Type: application/json -X POST -d {"analysis":"asym",
+"image":"lena.jpg"} http://127.0.0.1:5000/api/v0.0/jobs/new
+```
+
 ## Reporting Issues
 
 To report an issues or bug please use the [github issues page](https://github.com/maxrousseau/pfla/issues). 
