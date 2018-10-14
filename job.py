@@ -334,10 +334,12 @@ class Job(object):
         # run analysis functions
         if self.json_obj["task"] == "asym":
             asym_result = self.asym(ldmk_coords)
+            self.json_obj["result"] = asym_result
             result_str = str(asym_result)
 
         elif self.json_obj["task"] == "lfh":
             lfh_result = self.lfh(ldmk_coords)
+            self.json_obj["result"] = lfh_result
             result_str = str(lfh_result)
 
 #        elif self.json_obj["task"] == "med":
@@ -345,14 +347,17 @@ class Job(object):
 
         elif self.json_obj["task"] == "ratio1":
             ratio1_result = self.ratio1(ldmk_coords)
+            self.json_obj["result"] = ratio1_result
             result_str = str(ratio1_result)
 
         elif self.json_obj["task"] == "ratio2":
             ratio2_result = self.ratio2(ldmk_coords)
+            self.json_obj["result"] = ratio2_result
             result_str = str(ratio2_result)
 
         elif self.json_obj["task"] == "ratio3":
             ratio3_result = self.ratio3(ldmk_coords)
+            self.json_obj["result"] = ratio3_result
             result_str = str(ratio3_result)
 
         else:
