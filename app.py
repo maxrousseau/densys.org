@@ -11,13 +11,6 @@ allowed_extensions = set(['png', 'jpg', 'jpeg'])
 app = Flask(__name__)
 app.config['upload_folder'] = upload_folder
 jobs = [
-    {
-        'id' : 1,
-        'analysis' : 'asym',
-        'image' : None,
-        'complete' : False,
-        'result' : ''
-    }
 ]
 
 def allowed_file(filename):
@@ -32,8 +25,6 @@ def make_public_job(job):
             new_job[field] = job[field]
     return new_job
 
-
-@app.route('/api/v0.0/analysis', methods=['GET', 'POST'])
 def run_analysis(image, task):
     """Create a job and call analysis
     This method will create a job object and call the analysis on the
@@ -56,7 +47,6 @@ def run_analysis(image, task):
     hash_id = new_job.json_obj['hash']
     return result, hash_id
 
-# get list of jobs
 @app.route('/api/v0.0/jobs', methods=['GET'])
 def get_jobs():
     """list current jobs
@@ -72,11 +62,10 @@ def get_jobs():
     """
     return jsonify({'jobs':[make_public_job(job) for job in jobs]})
 
-# get a specific job 
 @app.route('/api/v0.0/jobs/<int:job_id>', methods=['GET'])
 def get_job(job_id):
     """fetch a specific job
-    This method will fetch a specific job from the job list
+    This method will fetch a specific job from the job list.
 
     Parameters
     ----------
@@ -92,40 +81,73 @@ def get_job(job_id):
         abort(404)
     return jsonify({'job': [make_public_job(job[0])]})
 
-# improved error message
-@app.errorhandler(404)
-def not_found(error):
-    """error handle
-    Returns an error message
+@app.route('/api/v0.0/jobs/new', methods=['POST'])
+def create_job():
+    """create a job entry
+    This method will create a job method to be executed.
 
     Parameters
     ----------
-    error : string
+    None
+
+    Requests
+    --------
+    'analysis' : string
+        analysis to be conducted on image
+    'image' : path
+        path to image
 
     Returns
     ------
-    make_response : JSON entry
+    job : JSON entry
     """
-    return make_response(jsonify({'error':'Not found'}), 404)
-
-# post a new job
-@app.route('/api/v0.0/jobs/new', methods=['POST'])
-def create_job():
-    if not request.json or not 'analysis' in request.json:
+    if not request.json or not 'analysis' or not 'image' in request.json:
         abort(400)
 
-    job = {
-        'id':jobs[-1]['id']+1,
-        'analysis':request.json['analysis'],
-        'image': None,
-        'complete':False
-    }
+    # run analysis on the new job
+    new_result, new_hash = run_analysis(request.json['image'], request.json['analysis'])
+
+    # add a JSON entry
+    if not len(jobs) == 0:
+        job = {
+            'id':jobs[-1]['id']+1,
+            'analysis':request.json['analysis'],
+            'image': request.json['image'],
+            'hash' : new_hash,
+            'result' : new_result,
+            'complete':False
+        }
+    else:
+        job = {
+            'id':0,
+            'analysis':request.json['analysis'],
+            'image': request.json['image'],
+            'hash' : new_hash,
+            'result' : new_result,
+            'complete':False
+        }
 
     jobs.append(job)
+
+    # change job status and delete once the job will have been delivered to
+    # user
+
     return jsonify({'job':job}), 201
 
 @app.route('/api/v0.0/upload', methods=['GET', 'POST'])
 def upload_file():
+    """upload an image to the platform
+    This methods allows the selection of a file to upload to the platform via
+    the html form.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    ------
+    form : html
+    """
     if request.method == 'POST':
         if 'file' not in request.files:
             flash('No file part')
@@ -136,7 +158,9 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['upload_folder'], filename))
+            new_image = os.path.join(app.config['upload_folder'], filename)
+            file.save(new_image)
+
             return redirect(url_for('uploaded_file', filename=filename))
 
     return '''
@@ -150,11 +174,33 @@ def upload_file():
     '''
 @app.route('/api/v0.0/uploaded_file', methods=['GET'])
 def uploaded_file():
-    return 'success'
+    """uploaded file redirection
+    This method will display a success message once the upload has been
+    completed.
 
-# update job completion status
+    Parameters
+    ----------
+    None
+
+    Returns
+    ------
+    'succes' : string
+    """
+    return "success"
+
 @app.route('/api/v0.0/jobs/<int:job_id>', methods=['PUT'])
 def update_job(job_id):
+    """update job completion status
+    This method will update a job's completion status.
+
+    Parameters
+    ----------
+    job_id : int
+
+    Returns
+    -------
+    job : JSON entry
+    """
     job = [job for job in jobs if job['id'] == job_id]
     if len(job) == 0:
         abort(404)
@@ -168,14 +214,40 @@ def update_job(job_id):
     job[0]['complete'] = request.json.get('complete', job[0]['complete'])
     return jsonify({'job':[make_public_job(job[0])]})
 
-# delete a job
 @app.route('/api/v0.0/jobs/<int:job_id>', methods=['DELETE'])
 def delete_job(job_id):
+    """deletes a job
+    This method will delete a job entry from the jobs JSON object.
+
+    Parameters
+    ----------
+    job_id : int
+
+    Returns
+    ------
+    result : JSON entry
+    """
+
     job = [job for job in jobs if job['id'] == job_id]
     if len(job) == 0:
         abort(404)
     jobs.remove(job[0])
     return jsonify({'result':True})
+
+@app.errorhandler(404)
+def not_found(error):
+    """improved error message
+    This method will returns an error message.
+
+    Parameters
+    ----------
+    error : string
+
+    Returns
+    ------
+    make_response : JSON entry
+    """
+    return make_response(jsonify({'error':'Not found'}), 404)
 
 if __name__ == '__main__':
     app.run(debug=True)
