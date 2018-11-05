@@ -44,6 +44,7 @@ TODO
 - [ ] tests for jobs.py, app.py and linear.py
 - [ ] documentation generation with sphinx and RTD hosting
 - [ ] front end reactJS
+- [ ] migrate db to prostgreSQL
 - [ ] travisCI 
 - [ ] deployment on heroku
 

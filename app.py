@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 from flask import Flask, flash, jsonify, abort, make_response, request
-from flask import url_for, redirect
+from flask import url_for, redirect, render_template
 from werkzeug.utils import secure_filename
-import job
+from modules import job
 import os
 
 upload_folder = os.path.abspath('./uploads')
@@ -13,7 +13,7 @@ app.config['upload_folder'] = upload_folder
 jobs = [
 ]
 
-def allowed_file(filename):
+def allowed_FILE(FILEName):
     return '.' in filename and filename.rsplit('.',1)[1].lower() in allowed_extensions
 
 def make_public_job(job):
@@ -60,6 +60,7 @@ def get_jobs():
     ------
     jobs : JSON object
     """
+    return render_template("home.html")
     return jsonify({'jobs':[make_public_job(job) for job in jobs]})
 
 @app.route('/api/v0.0/jobs/<int:job_id>', methods=['GET'])
