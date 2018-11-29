@@ -1,0 +1,19 @@
+curl -g -i -H Content-Type: application/json -X POST -d {"image":"lena.png", "analysis":"asym"} http://127.0.0.1:5000/api/v0.0/jobs/new
+
+
+HTTP/1.0 201 CREATED
+Content-Type: application/json
+Content-Length: 196
+Server: Werkzeug/0.14.1 Python/3.5.5
+Date: Thu, 29 Nov 2018 01:49:19 GMT
+
+{
+  "job": {
+    "analysis": "asym", 
+    "complete": false, 
+    "hash": "f9501b87-a9a6-4169-bc07-80e474f822cc", 
+    "id": 2, 
+    "image": "lena.png", 
+    "result": "0.9302743569312918"
+  }
+}
