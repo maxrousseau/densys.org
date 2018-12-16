@@ -30,7 +30,7 @@ Contribute
 
 Use conda to reproduce the development environment:
 ```sh
-conda env create -f environment.yml
+conda env create -f environment-dev.yml
 ```
 
 -   Refer to the contribution guidelines: <https://github.com/maxrousseau/flask-pfla/blob/master/contributing.md> 

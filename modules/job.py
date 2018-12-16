@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 import sys
 import os
-root_path = os.path.abspath("../")
+root_path = os.path.abspath(os.path.join(__file__, "../../"))
 sys.path.append(root_path)
 import uuid
 import json

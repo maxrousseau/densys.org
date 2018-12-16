@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
+import os
 from flask import Flask, flash, jsonify, abort, make_response, request
 from flask import url_for, redirect, render_template
 from werkzeug.utils import secure_filename
 from modules import job
-import os
 
 upload_folder = os.path.abspath('./uploads')
 allowed_extensions = set(['png', 'jpg', 'jpeg'])
 app = Flask(__name__)
 app.config['upload_folder'] = upload_folder
-jobs = [
-]
+jobs = []
 
 def allowed_FILE(FILEName):
     return '.' in filename and filename.rsplit('.',1)[1].lower() in allowed_extensions
@@ -102,6 +101,7 @@ def create_job():
     ------
     job : JSON entry
     """
+    # verify request
     if not request.json or not 'analysis' or not 'image' in request.json:
         abort(400)
 
@@ -251,4 +251,5 @@ def not_found(error):
     return make_response(jsonify({'error':'Not found'}), 404)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    #app.run(debug=True)
+    app.run(host='0.0.0.0', port=80)
