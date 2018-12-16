@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
+################################################################################
+#
+#   TODO: implement the draw method and the MED once we have a benchmark
+#           for comparisons.
+#
+################################################################################
 import sys
 import os
 root_path = os.path.abspath(os.path.join(__file__, "../../"))
@@ -36,7 +42,7 @@ class Job(object):
         ------
         None
         """
-        # modification to the default encoder for uuid serilization
+        # modification to the default encoder for uuid serialization
         json.JSONEncoder_olddefault = json.JSONEncoder.default
         def JSONEncoder_newdefault(self, o):
             if isinstance(o, uuid.UUID): return str(o)
@@ -50,12 +56,14 @@ class Job(object):
         model = os.path.join(root_path, "models/deploy2.caffemodel")
         shape_model = os.path.join(root_path, "models/68_landmarks.dat")
         joblist = os.path.join(root_path, str("db/jobs/"+str(self.hash)+".json"))
+        img_db = os.path.join(root_path, "db", "img")
         self.paths = {
             "curr_dir" : curr_dir,
             "prototxt" : prototxt,
             "model" : model,
             "joblist" : joblist,
-            "shape_model" : shape_model
+            "shape_model" : shape_model,
+            "img_db" : img_db
         }
         self.image = image
         self.task = task
@@ -64,6 +72,7 @@ class Job(object):
         self.json_obj = {
             "hash" : self.hash,
             "img_raw" : image,
+            "resultimg_path": "NONE",
             "task" : self.task,
             "is_complete" : self.is_complete,
             "face_coord" : [],
@@ -77,11 +86,41 @@ class Job(object):
             "result" : 0
         }
         self.confidence = 0.7
+        self.purple = (153, 51, 255)
+        self.pink = (255, 51, 255)
+        self.blue = (255, 153, 51)
+
+    def draw_line(self, inpt_img, point_1, point_2, color):
+        """Draw a colored line
+        This method will draw a colored line on top of the input image and
+        return the resulting image.
+
+        Parameters
+        ----------
+        inpt_img : opencv_image
+            input image to be drawn
+        point_1 : int array
+            coordinate of the the first point (ex. x,y [108, 395])
+        point_2 : int array
+            coordinate of the the second point (ex. x,y [108, 395])
+        color : int tuples
+            color of the line to be drawn (ex. BGR (250, 0, 0))
+
+        Returns
+        ------
+        img_newline : opencv_image
+            new image with the line drawn
+        """
+
+        img_newline = cv2.line(inpt_img, point_1, point_2, color)
+
+        return img_newline
 
 #    def med(self):
 #        """Executes the Mean Euclidean Distance analysis"""
 #
 #        return result
+
 
     def ratio1(self, coords):
         """Computes the value of ratio 1
@@ -103,6 +142,18 @@ class Job(object):
                                       coords["X46"], coords["Y46"])
         ratio1_res = bioc_dist / bitemp_dist
         self.json_obj["ratio1"] = ratio1_res
+
+        point_1 = (coords["X1"], coords["Y1"])
+        point_2 = (coords["X17"], coords["Y17"])
+        result_image = self.draw_line(cv2.imread(self.image), point_1, point_2, self.blue)
+
+        point_1 = (coords["X37"], coords["Y37"])
+        point_2 = (coords["X46"], coords["Y46"])
+        result_image = self.draw_line(result_image, point_1, point_2, self.purple)
+
+        img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_ratio1.png")
+        cv2.imwrite(img_name, result_image)
+        self.json_obj["resultimg_path"] = img_name
 
         return ratio1_res
 

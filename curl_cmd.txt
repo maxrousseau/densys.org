@@ -12,3 +12,22 @@ Server: Werkzeug/0.14.1 Python/3.7.1
 Date: Sun, 16 Dec 2018 03:30:03 GMT
 
 {"job":{"analysis":"asym","complete":false,"hash":"3a0d0ff0-4acb-4987-b471-ff0a550707a6","id":1,"image":"lena.png","result":"0.9229898061663625"}}
+curl -g -i -H Content-Type:application/json -X POST -d {"image":"lena.png",
+"analysis":"ratio1"} http://localhost:5000/api/v0.0/jobs/new
+HTTP/1.0 201 CREATED
+Content-Type: application/json
+Content-Length: 309
+Server: Werkzeug/0.14.1 Python/3.5.5
+Date: Sun, 16 Dec 2018 20:23:36 GMT
+
+{
+  "job": {
+    "analysis": "ratio1", 
+    "complete": false, 
+    "hash": "dff5adf7-2be1-4078-b061-66f0f00a9c86", 
+    "id": 1, 
+    "image": "lena.png", 
+    "result": "0.6299248822985924", 
+    "resultimg_path": "/home/max/Projects/flask-pfla/db/img/dff5adf7-2be1-4078-b061-66f0f00a9c86_ratio1.png"
+  }
+}

@@ -44,7 +44,8 @@ def run_analysis(image, task):
     new_job = job.Job(image, task)
     result = new_job.execute()
     hash_id = new_job.json_obj['hash']
-    return result, hash_id
+    resultimg_path = new_job.json_obj['resultimg_path']
+    return result, hash_id, resultimg_path
 
 @app.route('/api/v0.0/jobs', methods=['GET'])
 def get_jobs():
@@ -106,7 +107,7 @@ def create_job():
         abort(400)
 
     # run analysis on the new job
-    new_result, new_hash = run_analysis(request.json['image'], request.json['analysis'])
+    new_result, new_hash, resultimg_path = run_analysis(request.json['image'], request.json['analysis'])
 
     # add a JSON entry
     if not len(jobs) == 0:
@@ -116,6 +117,7 @@ def create_job():
             'image': request.json['image'],
             'hash' : new_hash,
             'result' : new_result,
+            'resultimg_path' : resultimg_path,
             'complete':False
         }
     else:
@@ -125,6 +127,7 @@ def create_job():
             'image': request.json['image'],
             'hash' : new_hash,
             'result' : new_result,
+            'resultimg_path' : resultimg_path,
             'complete':False
         }
 
@@ -251,5 +254,5 @@ def not_found(error):
     return make_response(jsonify({'error':'Not found'}), 404)
 
 if __name__ == '__main__':
-    #app.run(debug=True)
-    app.run(host='0.0.0.0', port=80)
+    app.run(debug=True)
+    #app.run(host='0.0.0.0', port=80)
