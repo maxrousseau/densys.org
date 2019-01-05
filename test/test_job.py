@@ -34,7 +34,8 @@ class TestJob(object):
 
     def test_init(self, image_setup):
         sample_job = image_setup
-        assert len(sample_job.json_obj) == 13
+        print(len(sample_job.json_obj))
+        assert len(sample_job.json_obj) == 14
 
     #def test_asym(self, image_setup):
 

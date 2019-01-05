@@ -178,11 +178,23 @@ class Job(object):
         ratio2_res = bimand_dist / bitemp_dist
         self.json_obj["ratio2"] = ratio2_res
 
+        point_1 = (coords["X1"], coords["Y1"])
+        point_2 = (coords["X17"], coords["Y17"])
+        result_image = self.draw_line(cv2.imread(self.image), point_1, point_2, self.blue)
+
+        point_1 = (coords["X5"], coords["Y5"])
+        point_2 = (coords["X13"], coords["Y13"])
+        result_image = self.draw_line(result_image, point_1, point_2, self.purple)
+
+        img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_ratio2.png")
+        cv2.imwrite(img_name, result_image)
+        self.json_obj["resultimg_path"] = img_name
+
         return ratio2_res
 
     def ratio3(self, coords):
         """Computes the value of ratio 3
-        This method will compute third facial ratio (28-9/1-17)
+        This method will compute third facial ratio (1-17/28-9)
 
         Parameters
         ----------
@@ -198,8 +210,20 @@ class Job(object):
                                       coords["X17"], coords["Y17"])
         face_height = ln.Linear.euc_dist(self, coords["X28"], coords["Y28"],
                                       coords["X9"], coords["Y9"])
-        ratio3_res = face_height / bitemp_dist
+        ratio3_res = bitemp_dist / face_height
         self.json_obj["ratio3"] = ratio3_res
+
+        point_1 = (coords["X1"], coords["Y1"])
+        point_2 = (coords["X17"], coords["Y17"])
+        result_image = self.draw_line(cv2.imread(self.image), point_1, point_2, self.blue)
+
+        point_1 = (coords["X28"], coords["Y28"])
+        point_2 = (coords["X9"], coords["Y9"])
+        result_image = self.draw_line(result_image, point_1, point_2, self.purple)
+
+        img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_ratio3.png")
+        cv2.imwrite(img_name, result_image)
+        self.json_obj["resultimg_path"] = img_name
 
         return ratio3_res
 
@@ -223,6 +247,19 @@ class Job(object):
                                       coords["X9"], coords["Y9"])
         lfw_res = lower_face / face_height
         self.json_obj["lfh"] = lfw_res
+
+        point_1 = (coords["X34"], coords["Y34"])
+        point_2 = (coords["X9"], coords["Y9"])
+        result_image = self.draw_line(cv2.imread(self.image), point_1, point_2, self.blue)
+
+        point_1 = (coords["X28"], coords["Y28"])
+        point_2 = (coords["X9"], coords["Y9"])
+        result_image = self.draw_line(result_image, point_1, point_2, self.purple)
+
+        img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_lfh.png")
+        cv2.imwrite(img_name, result_image)
+        self.json_obj["resultimg_path"] = img_name
+
 
         return lfw_res
 
@@ -285,7 +322,7 @@ class Job(object):
         lin_func = ln.Linear(corrsp_ax, corrsp_ay, corrsp_bx, corrsp_by)
 
         # compute the coordinates of the origins (O)
-        origin_x, origin_y = lin_func.solve(midline.slope, midline.constant)
+        origin_x, origin_y = lin_func.solve(midline.slopes, midline.constants)
 
 
         # compute distance RO and LO
@@ -293,12 +330,26 @@ class Job(object):
         distances_b = lin_func.euc_dist(corrsp_bx, corrsp_by, origin_x, origin_y)
 
         # compute absolute difference RO - LO
-        diff_ab = (distances_a - distances_b)/(distances_a + distances_b)
+        diff_ab = (distances_a - distances_b) / (distances_a + distances_b)
         abs_diff = np.absolute(diff_ab)
 
         # sum of absolute differences
         sum_diff = np.sum(abs_diff)
         self.json_obj["asym"] = sum_diff
+
+        result_image = cv2.imread(self.image)
+
+        for i in range(len(corrsp_ax)):
+            point_1 = (corrsp_ax[i], corrsp_ay[i])
+            point_2 = (int(origin_x[i]), int(origin_y[i]))
+            result_image = self.draw_line(result_image, point_1, point_2, self.blue)
+
+            point_1 = (corrsp_bx[i], corrsp_by[i])
+            result_image = self.draw_line(result_image, point_1, point_2, self.purple)
+
+        img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_asym.png")
+        cv2.imwrite(img_name, result_image)
+        self.json_obj["resultimg_path"] = img_name
 
         return sum_diff
 

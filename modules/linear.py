@@ -28,12 +28,17 @@ class Linear(object):
         ------
         None
         """
+
         self.x1 = coords_ax
         self.y1 = coords_ay
         self.x2 = coords_bx
-        self.y2 = coords_bx
-        self.slope = (self.y2 - self.y1) / (self.x2 - self.x1)
-        self.constant = self.y1 - self.slope*self.x1
+        self.y2 = coords_by
+
+        y_diff = self.y2-self.y1
+        x_diff = self.x2-self.x1
+
+        self.slopes = y_diff/x_diff
+        self.constants = self.y1 - (self.slopes*self.x1)
 
     def solve(self, input_slope, input_constant):
         """calculates Y coordinate for a given X
@@ -48,16 +53,15 @@ class Linear(object):
         Returns
         ------
         output_y : int
-            resulting Y from the arithmetic computations
+            resulting X and Y from the arithmetic computations
         """
-        a = input_slope
-        b = input_constant
-        c = self.slope
-        d = self.constant
-        inter_x = (d - b)/(a - c)
-        inter_y = (a*c) + d
+        input_slope = np.array(input_slope)
+        input_constant = np.array(input_constant)
 
-        return inter_x, inter_y
+        x_inter = (input_constant - self.constants) / (self.slopes - input_slope)
+        y_inter = (self.slopes*x_inter) + self.constants
+
+        return x_inter, y_inter
 
     def euc_dist(self, ldmk_ax, ldmk_ay, ldmk_bx, ldmk_by):
         """compute the Euclidean distance between 2 landmarks
