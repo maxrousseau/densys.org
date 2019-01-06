@@ -28,5 +28,5 @@ EXPOSE 80
 ENV NAME World
 
 # run my app when the container lauches
-# CMD ["python", "app.py"]
-CMD gunicorn --bind 0.0.0.0:$PORT wgsi
+CMD ["python", "app.py"]
+# CMD gunicorn --bind 0.0.0.0:$PORT wgsi
