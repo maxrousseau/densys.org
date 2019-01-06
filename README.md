@@ -1,4 +1,4 @@
-Flask-PFLA
+DENSYS.ORG
 ==========
 
 This web applications aims at making the analyses from the [pfla
@@ -45,7 +45,7 @@ TODO
 - [ ] documentation generation with sphinx and RTD hosting
 - [ ] front end reactJS
 - [ ] travisCI
-- [ ] deployment on heroku
+- [x] deployment on heroku
 
 License
 -------
