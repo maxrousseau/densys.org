@@ -216,6 +216,7 @@ def update_job(job_id):
         abort(400)
     job[0]['analysis'] = request.json.get('analysis', job[0]['analysis'])
     job[0]['complete'] = request.json.get('complete', job[0]['complete'])
+
     return jsonify({'job':[make_public_job(job[0])]})
 
 @app.route('/api/v0.0/jobs/<int:job_id>', methods=['DELETE'])
@@ -236,6 +237,7 @@ def delete_job(job_id):
     if len(job) == 0:
         abort(404)
     jobs.remove(job[0])
+
     return jsonify({'result':True})
 
 @app.errorhandler(404)
@@ -254,5 +256,7 @@ def not_found(error):
     return make_response(jsonify({'error':'Not found'}), 404)
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    #app.run(host='0.0.0.0', port=80)
+    # for local development
+    # app.run(debug=True)
+    # use when building docker images
+    app.run(host='0.0.0.0', port=80)
