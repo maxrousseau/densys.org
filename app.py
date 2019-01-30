@@ -45,7 +45,8 @@ def run_analysis(image, task):
     result = new_job.execute()
     hash_id = new_job.json_obj['hash']
     resultimg_path = new_job.json_obj['resultimg_path']
-    return result, hash_id, resultimg_path
+    b64_img = new_job.json_obj['b64_img']
+    return result, hash_id, resultimg_path, b64_img
 
 @app.route('/api/v0.0/jobs', methods=['GET'])
 def get_jobs():
@@ -107,7 +108,9 @@ def create_job():
         abort(400)
 
     # run analysis on the new job
-    new_result, new_hash, resultimg_path = run_analysis(request.json['image'], request.json['analysis'])
+    global new_result, new_hash, resultimg_path
+    new_result, new_hash, resultimg_path, b64_img = run_analysis(request.json['image'], 
+                                                        request.json['analysis'])
 
     # add a JSON entry
     if not len(jobs) == 0:
@@ -118,6 +121,7 @@ def create_job():
             'hash' : new_hash,
             'result' : new_result,
             'resultimg_path' : resultimg_path,
+            'b64_img' : b64_img,
             'complete':False
         }
     else:
@@ -128,6 +132,7 @@ def create_job():
             'hash' : new_hash,
             'result' : new_result,
             'resultimg_path' : resultimg_path,
+            'b64_img' : b64_img,
             'complete':False
         }
 
@@ -137,6 +142,18 @@ def create_job():
     # user
 
     return jsonify({'job':job}), 201
+
+#@app.route('/images/<int:pid>.jpg', methods=['GET'])
+@app.route('/images')
+#def get_image(pid)
+def get_image():
+    #img_hash = pid
+    #file_path = os.path.join()
+
+    return '''
+    <!doctype html>
+    <h1>lakjdfhblaksjhdf<\h1>
+    '''
 
 @app.route('/api/v0.0/upload', methods=['GET', 'POST'])
 def upload_file():
@@ -176,6 +193,13 @@ def upload_file():
     <input type=submit value=Upload>
     </form>
     '''
+@app.route('/api/v0.0/<string:img_id>')
+def image_display(img_id):
+    processed_img_path = os.path.abspath(os.path.join('db', 'img', img_id))
+    print('this is my path: ' + processed_img_path)
+    return render_template("image_display.html", user_image =
+                           processed_img_path)
+
 @app.route('/api/v0.0/uploaded_file', methods=['GET'])
 def uploaded_file():
     """uploaded file redirection
@@ -257,6 +281,6 @@ def not_found(error):
 
 if __name__ == '__main__':
     # for local development
-    # app.run(debug=True)
+    app.run(debug=True)
     # use when building docker images
-    app.run(host='0.0.0.0', port=80)
+    #app.run(host='0.0.0.0', port=80)

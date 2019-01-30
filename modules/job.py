@@ -10,10 +10,12 @@ import sys
 import os
 root_path = os.path.abspath(os.path.join(__file__, "../../"))
 sys.path.append(root_path)
+import base64
 import uuid
 import json
 import cv2
 import dlib
+import urllib.request as ul
 import numpy as np
 from modules import linear as ln
 
@@ -21,7 +23,7 @@ class Job(object):
     """This class will act as a controller for the analysis pushed to the api"""
 
 
-    def __init__(self, image, task):
+    def __init__(self, image_url, task):
         """Job object to create, store, exectute and post results
         Upon initialization a hash will be assigned to the image which will serve
         as a unique identifier.
@@ -65,13 +67,14 @@ class Job(object):
             "shape_model" : shape_model,
             "img_db" : img_db
         }
-        self.image = image
+        self.image_url = image_url
         self.task = task
         self.is_complete = False
         # initialize the json object for this job
         self.json_obj = {
+            "b64_img" : "NONE",
             "hash" : self.hash,
-            "img_raw" : image,
+            "img_url" : self.image_url,
             "resultimg_path": "NONE",
             "task" : self.task,
             "is_complete" : self.is_complete,
@@ -89,6 +92,13 @@ class Job(object):
         self.purple = (153, 51, 255)
         self.pink = (255, 51, 255)
         self.blue = (255, 153, 51)
+
+    def url_to_image(self, url):
+        wbimg = ul.urlopen(url)
+        image = np.asarray(bytearray(wbimg.read()), dtype="uint8")
+        image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+
+        return image
 
     def draw_line(self, inpt_img, point_1, point_2, color):
         """Draw a colored line
@@ -112,7 +122,7 @@ class Job(object):
             new image with the line drawn
         """
 
-        img_newline = cv2.line(inpt_img, point_1, point_2, color)
+        img_newline = cv2.line(inpt_img, point_1, point_2, color, thickness=7)
 
         return img_newline
 
@@ -145,11 +155,13 @@ class Job(object):
 
         point_1 = (coords["X1"], coords["Y1"])
         point_2 = (coords["X17"], coords["Y17"])
-        result_image = self.draw_line(cv2.imread(self.image), point_1, point_2, self.blue)
+        result_image = image
+        result_image = self.draw_line(result_image, point_1, point_2, self.blue)
 
         point_1 = (coords["X37"], coords["Y37"])
         point_2 = (coords["X46"], coords["Y46"])
         result_image = self.draw_line(result_image, point_1, point_2, self.purple)
+        self.json_obj["b64_img"] = str(base64.b64encode(result_image))
 
         img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_ratio1.png")
         cv2.imwrite(img_name, result_image)
@@ -180,11 +192,13 @@ class Job(object):
 
         point_1 = (coords["X1"], coords["Y1"])
         point_2 = (coords["X17"], coords["Y17"])
-        result_image = self.draw_line(cv2.imread(self.image), point_1, point_2, self.blue)
+        result_image = image
+        result_image = self.draw_line(result_image, point_1, point_2, self.blue)
 
         point_1 = (coords["X5"], coords["Y5"])
         point_2 = (coords["X13"], coords["Y13"])
         result_image = self.draw_line(result_image, point_1, point_2, self.purple)
+        self.json_obj["b64_img"] = str(base64.b64encode(result_image))
 
         img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_ratio2.png")
         cv2.imwrite(img_name, result_image)
@@ -215,11 +229,13 @@ class Job(object):
 
         point_1 = (coords["X1"], coords["Y1"])
         point_2 = (coords["X17"], coords["Y17"])
-        result_image = self.draw_line(cv2.imread(self.image), point_1, point_2, self.blue)
+        result_image = image
+        result_image = self.draw_line(result_image, point_1, point_2, self.blue)
 
         point_1 = (coords["X28"], coords["Y28"])
         point_2 = (coords["X9"], coords["Y9"])
         result_image = self.draw_line(result_image, point_1, point_2, self.purple)
+        self.json_obj["b64_img"] = str(base64.b64encode(result_image))
 
         img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_ratio3.png")
         cv2.imwrite(img_name, result_image)
@@ -250,11 +266,13 @@ class Job(object):
 
         point_1 = (coords["X34"], coords["Y34"])
         point_2 = (coords["X9"], coords["Y9"])
-        result_image = self.draw_line(cv2.imread(self.image), point_1, point_2, self.blue)
+        result_image = image
+        result_image = self.draw_line(result_image, point_1, point_2, self.blue)
 
         point_1 = (coords["X28"], coords["Y28"])
         point_2 = (coords["X9"], coords["Y9"])
         result_image = self.draw_line(result_image, point_1, point_2, self.purple)
+        self.json_obj["b64_img"] = str(base64.b64encode(result_image))
 
         img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_lfh.png")
         cv2.imwrite(img_name, result_image)
@@ -337,7 +355,7 @@ class Job(object):
         sum_diff = np.sum(abs_diff)
         self.json_obj["asym"] = sum_diff
 
-        result_image = cv2.imread(self.image)
+        result_image = image
 
         for i in range(len(corrsp_ax)):
             point_1 = (corrsp_ax[i], corrsp_ay[i])
@@ -346,6 +364,8 @@ class Job(object):
 
             point_1 = (corrsp_bx[i], corrsp_by[i])
             result_image = self.draw_line(result_image, point_1, point_2, self.purple)
+
+        self.json_obj["b64_img"] = str(base64.b64encode(result_image))
 
         img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_asym.png")
         cv2.imwrite(img_name, result_image)
@@ -380,7 +400,8 @@ class Job(object):
 
         face_net = cv2.dnn.readNetFromCaffe(self.paths["prototxt"],
                                             self.paths["model"])
-        image = cv2.imread(self.image)
+        global image
+        image = self.url_to_image(self.image_url)
         (height, width) = image.shape[:2]
         blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)),
                                      1.0,

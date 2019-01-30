@@ -47,6 +47,14 @@ TODO
 - [ ] travisCI
 - [x] deployment on heroku
 
+Deployment commands
+------------------
+```sh
+sudo heroku container:push web
+sudo heroku container:release web
+heroku open
+```
+
 License
 -------
 The project is licensed under the MIT license.

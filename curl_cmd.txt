@@ -33,3 +33,54 @@ Date: Sun, 16 Dec 2018 20:23:36 GMT
     "resultimg_path": "/home/max/Projects/flask-pfla/db/img/dff5adf7-2be1-4078-b061-66f0f00a9c86_ratio1.png"
   }
 }
+HTTP/1.0 201 CREATED
+Content-Type: application/json
+Content-Length: 348
+Server: Werkzeug/0.14.1 Python/3.5.5
+Date: Sat, 12 Jan 2019 22:53:20 GMT
+
+{
+  "job": {
+    "analysis": "asym", 
+    "complete": false, 
+    "hash": "4f5add9e-549e-4d88-8a44-eff8c7775548", 
+    "id": 1, 
+    "image": "http://optipng.sourceforge.net/pngtech/img/lena.png", 
+    "result": "7.6583704700187685", 
+    "resultimg_path": "/home/max/Projects/densys.org/db/img/4f5add9e-549e-4d88-8a44-eff8c7775548_asym.png"
+  }
+}
+HTTP/1.0 201 CREATED
+Content-Type: application/json
+Content-Length: 348
+Server: Werkzeug/0.14.1 Python/3.5.5
+Date: Sat, 12 Jan 2019 22:57:47 GMT
+
+{
+  "job": {
+    "analysis": "asym", 
+    "complete": false, 
+    "hash": "42761bf0-f40d-48d0-8870-eacede0eff6f", 
+    "id": 0, 
+    "image": "http://optipng.sourceforge.net/pngtech/img/lena.png", 
+    "result": "7.6583704700187685", 
+    "resultimg_path": "/home/max/Projects/densys.org/db/img/42761bf0-f40d-48d0-8870-eacede0eff6f_asym.png"
+  }
+}
+HTTP/1.0 201 CREATED
+Content-Type: application/json
+Content-Length: 376
+Server: Werkzeug/0.14.1 Python/3.5.5
+Date: Sat, 12 Jan 2019 23:39:18 GMT
+
+{
+  "job": {
+    "analysis": "asym", 
+    "complete": false, 
+    "hash": "95cc5a48-d004-4a30-b1df-1dc1aa49f575", 
+    "id": 0, 
+    "image": "https://hips.hearstapps.com/rbk.h-cdn.co/assets/17/14/round-face-hairstyle-2.jpg", 
+    "result": "0.623205925562755", 
+    "resultimg_path": "/home/max/Projects/densys.org/db/img/95cc5a48-d004-4a30-b1df-1dc1aa49f575_asym.png"
+  }
+}
