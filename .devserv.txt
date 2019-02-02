@@ -1,0 +1,27 @@
+Development server: https://stormy-hollows-38428.herokuapp.com
+Nothing displaying there at the moment since there is no html, only an api.
+
+	Here there is some html of a prototype: https://stormy-hollows-38428.herokuapp.com/api/v0.0/jobs
+
+Curl command to post a new image:
+
+curl -g -i -H Content-Type:application/json -X POST -d {"image":"http://optipng.sourceforge.net/pngtech/img/lena.png", "analysis":"asym"} https://stormy-hollows-38428.herokuapp.com/api/v0.0/jobs/new
+
+
+{"job":{"analysis":"asym","b64_img":"b'fYni........Ue1UUq5'","complete":false,"hash":"aa61c214-9251-4b76-bb57-a191a1bb71bb","id":1,"image":"http://optipng.sourceforge.net/pngtech/img/lena.png","result":"7.510844061041441","resultimg_path":"/app/db/img/aa61c214-9251-4b76-bb57-a191a1bb71bb_asym.png"}}
+
+NOTE: the base64 string was abridged for readability.
+
+There are currently 5 analysis that are possible: 
+- 'ratio1'
+- 'ratio2'
+- 'ratio3'
+- 'lfh'
+- 'asym'
+
+
+TODO:
+- finish tests for all functions
+- densys.org frontend
+- refactor for better performance
+
