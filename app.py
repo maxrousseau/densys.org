@@ -48,6 +48,22 @@ def run_analysis(image, task):
     b64_img = new_job.json_obj['b64_img']
     return result, hash_id, resultimg_path, b64_img
 
+@app.route('/index')
+def dis_index():
+    return render_template("index.html")
+
+@app.route('/analyses')
+def dis_analyses():
+    return render_template("analyses.html")
+
+@app.route('/about')
+def dis_about():
+    return render_template("about.html")
+
+@app.route('/papers')
+def dis_papers():
+    return render_template("papers.html")
+
 @app.route('/api/v0.0/jobs', methods=['GET'])
 def get_jobs():
     """list current jobs
