@@ -1,0 +1,12 @@
+**create the app if not already created (heroky create)**
+
+First you need to build the image push it to Heroku's container registry
+- heroky container:push web
+
+Then you release the new image to the app:
+- heroku container:release web
+
+open the app
+- heroku open
+
+
