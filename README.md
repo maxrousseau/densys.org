@@ -15,11 +15,25 @@ Requirements and Dependencies
 Testing
 -------
 
-To run all tests, enter the following in the cloned directory:
+To run all tests on the python source files, enter the following in the cloned
+directory:
 
 ```shell
-pytest 
+pytest
 ```
+
+To execute the api tests begin by deploying the the backend locally:
+
+```shell
+python app.py
+```
+
+Then follow up by executing the shell script:
+
+```shell
+./api-test.sh
+```
+
 
 Documentation
 -------------

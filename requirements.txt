@@ -1,5 +1,6 @@
 Flask
 numpy
 opencv-python
+opencv-contrib-python
 dlib
 gunicorn
