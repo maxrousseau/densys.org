@@ -57,7 +57,6 @@ TODO
 - [x] draw, save and display resulting image
 - [ ] tests for jobs.py, app.py and linear.py
 - [ ] documentation generation with sphinx and RTD hosting
-- [ ] front end reactJS
 - [ ] travisCI
 - [x] deployment on heroku
 
