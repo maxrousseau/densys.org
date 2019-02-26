@@ -29,13 +29,13 @@ class TestJob(object):
     @pytest.fixture
     def image_setup(self):
         # create a job for testing
-        sample_job = job.Job("lena.png", "asym")
+        sample_job = job.Job("http://optipng.sourceforge.net/pngtech/img/lena.png", "asym")
         return sample_job
 
     def test_init(self, image_setup):
         sample_job = image_setup
         print(len(sample_job.json_obj))
-        assert len(sample_job.json_obj) == 14
+        assert len(sample_job.json_obj) == 15
 
     #def test_asym(self, image_setup):
 

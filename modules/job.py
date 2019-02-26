@@ -121,8 +121,11 @@ class Job(object):
         img_newline : opencv_image
             new image with the line drawn
         """
-
-        img_newline = cv2.line(inpt_img, point_1, point_2, color, thickness=7)
+        height, width = inpt_img.shape[:2]
+        adj_thickness = int(height/270)
+        img_newline = cv2.line(inpt_img, point_1,
+                              point_2, color,
+                              thickness=adj_thickness, lineType=cv2.LINE_AA)
 
         return img_newline
 
@@ -414,7 +417,7 @@ class Job(object):
             confidence = detections[0, 0, i, 2]
             if confidence > self.confidence:
 
-                # multiple face warning!!!! --> if detections.shape[2] != 
+                # multiple face warning!!!! --> if detections.shape[2] !=
                 count = 0;
                 if count > 0:
                     print("[ERROR] NO OR MULTIPLE FACES DETECTED IN IMAGE")
@@ -489,7 +492,7 @@ class Job(object):
             print("[ERROR] TASK DOES NOT EXIST")
             print("[INFO] cancelling job")
 
-        # write results to 
+        # write results to an outfile
         if not os.path.isfile(self.paths["joblist"]):
             with open(self.paths["joblist"], "w") as outfile:
                 json.dump(self.json_obj, outfile)

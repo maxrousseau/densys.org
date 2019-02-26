@@ -47,9 +47,9 @@ Use conda to reproduce the development environment:
 conda env create -f environment-dev.yml
 ```
 
--   Refer to the contribution guidelines: <https://github.com/maxrousseau/flask-pfla/blob/master/contributing.md> 
--   Issue Tracker: <https://github.com/maxrousseau/flask-pfla/issues>
--   Source Code: <https://github.com/maxrousseau/flask-pfla>
+-   Refer to the contribution guidelines: <https://github.com/maxrousseau/densys.org/blob/master/contributing.md> 
+-   Issue Tracker: <https://github.com/maxrousseau/densys.org/issues>
+-   Source Code: <https://github.com/maxrousseau/densys.org>
 
 TODO
 ----
