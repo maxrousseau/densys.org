@@ -9,7 +9,7 @@ Requirements and Dependencies
 -----------------------------
 
 -   Python 3.5
--   Python packages: opencv-python, dlib, numpy 
+-   Python packages: opencv-python, dlib, numpy
 -   Linux operating system
 
 Testing
@@ -55,7 +55,8 @@ TODO
 ----
 - [x] complete all analysis functions
 - [x] draw, save and display resulting image
-- [ ] tests for jobs.py, app.py and linear.py
+- [x] tests for jobs.py, linear.py
+- [ ] refactor whole backend api
 - [ ] documentation generation with sphinx and RTD hosting
 - [ ] travisCI
 - [x] deployment on heroku

@@ -12,7 +12,7 @@ curl -g -i -H Content-Type:application/json -X POST -d {"image":"http://optipng.
 
 NOTE: the base64 string was abridged for readability.
 
-There are currently 5 analysis that are possible: 
+There are currently 5 analysis that are possible:
 - 'ratio1'
 - 'ratio2'
 - 'ratio3'

@@ -1,0 +1,3 @@
+C:\Users\roum5\source\densys.org\obj\Debug\densys.org.pyproj.CoreCompileInputs.cache
+C:\Users\roum5\source\densys.org\bin\Microsoft.PythonTools.WebRole.dll
+C:\Users\roum5\source\densys.org\bin\wfastcgi.py
