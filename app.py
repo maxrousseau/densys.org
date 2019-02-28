@@ -3,12 +3,14 @@
 import os
 from flask import Flask, flash, jsonify, abort, make_response, request
 from flask import url_for, redirect, render_template
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from modules import job
 
 upload_folder = os.path.abspath('./uploads')
 allowed_extensions = set(['png', 'jpg', 'jpeg'])
 app = Flask(__name__)
+CORS(app)
 app.config['upload_folder'] = upload_folder
 jobs = []
 
@@ -125,7 +127,7 @@ def create_job():
 
     # run analysis on the new job
     global new_result, new_hash, resultimg_path
-    new_result, new_hash, resultimg_path, b64_img = run_analysis(request.json['image'], 
+    new_result, new_hash, resultimg_path, b64_img = run_analysis(request.json['image'],
                                                         request.json['analysis'])
 
     # add a JSON entry
