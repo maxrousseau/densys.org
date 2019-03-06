@@ -23,7 +23,14 @@
   <ItemGroup>
     <Content Include=".deployment.txt" />
     <Content Include=".devserv.txt" />
+    <Content Include=".gitignore" />
+    <Content Include="api-test.sh" />
+    <Content Include="contributing.md" />
+    <Content Include="Dockerfile" />
+    <Content Include="environment.yml" />
     <Content Include="LICENCE.txt" />
+    <Content Include="Procfile" />
+    <Content Include="README.md" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>

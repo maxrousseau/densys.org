@@ -134,6 +134,11 @@ class Job(object):
 #
 #        return result
 
+    def b64_encoder(self, img):
+        success, encoded_img = cv2.imencode('.png', img)
+        if success:
+            return base64.b64encode(encoded_img).decode()
+        return ''
 
     def ratio1(self, coords):
         """Computes the value of ratio 1
@@ -164,7 +169,8 @@ class Job(object):
         point_1 = (coords["X37"], coords["Y37"])
         point_2 = (coords["X46"], coords["Y46"])
         result_image = self.draw_line(result_image, point_1, point_2, self.purple)
-        self.json_obj["b64_img"] = str(base64.b64encode(result_image))
+
+        self.json_obj["b64_img"] = self.b64_encoder(result_image)
 
         img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_ratio1.png")
         cv2.imwrite(img_name, result_image)
@@ -201,7 +207,7 @@ class Job(object):
         point_1 = (coords["X5"], coords["Y5"])
         point_2 = (coords["X13"], coords["Y13"])
         result_image = self.draw_line(result_image, point_1, point_2, self.purple)
-        self.json_obj["b64_img"] = str(base64.b64encode(result_image))
+        self.json_obj["b64_img"] = self.b64_encoder(result_image)
 
         img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_ratio2.png")
         cv2.imwrite(img_name, result_image)
@@ -238,7 +244,7 @@ class Job(object):
         point_1 = (coords["X28"], coords["Y28"])
         point_2 = (coords["X9"], coords["Y9"])
         result_image = self.draw_line(result_image, point_1, point_2, self.purple)
-        self.json_obj["b64_img"] = str(base64.b64encode(result_image))
+        self.json_obj["b64_img"] = self.b64_encoder(result_image)
 
         img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_ratio3.png")
         cv2.imwrite(img_name, result_image)
@@ -275,7 +281,7 @@ class Job(object):
         point_1 = (coords["X28"], coords["Y28"])
         point_2 = (coords["X9"], coords["Y9"])
         result_image = self.draw_line(result_image, point_1, point_2, self.purple)
-        self.json_obj["b64_img"] = str(base64.b64encode(result_image))
+        self.json_obj["b64_img"] = self.b64_encoder(result_image)
 
         img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_lfh.png")
         cv2.imwrite(img_name, result_image)
@@ -368,7 +374,7 @@ class Job(object):
             point_1 = (corrsp_bx[i], corrsp_by[i])
             result_image = self.draw_line(result_image, point_1, point_2, self.purple)
 
-        self.json_obj["b64_img"] = str(base64.b64encode(result_image))
+        self.json_obj["b64_img"] = self.b64_encoder(result_image)
 
         img_name = os.path.join(self.paths["img_db"], str(self.hash)+"_asym.png")
         cv2.imwrite(img_name, result_image)
