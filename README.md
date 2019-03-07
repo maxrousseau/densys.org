@@ -1,16 +1,16 @@
 DENSYS.ORG
 ==========
 
-This web applications aims at making the analyses from the [pfla
-package](<https://github.com/maxrousseau/flask-pfla) accessible and easy to use
+This is the repository of the backend API of densys.org.
+The web applications aims at making the analyses from the [pfla
+package](<https://github.com/maxrousseau/pfla) accessible and easy to use
 for non-programmers.
 
 Requirements and Dependencies
 -----------------------------
 
 -   Python 3.5
--   Python packages: opencv-python, dlib, numpy
--   Linux operating system
+-   Python packages: see requirements.txt and environment.yml
 
 Testing
 -------
@@ -64,8 +64,9 @@ TODO
 Deployment commands
 ------------------
 ```sh
-sudo heroku container:push web
-sudo heroku container:release web
+heroku container:login
+heroku container:push web
+heroku container:release web
 heroku open
 ```
 
