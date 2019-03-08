@@ -54,15 +54,19 @@ class Job(object):
         # create dictionnary of paths used in this file
         self.hash = uuid.uuid4()
         curr_dir = os.path.dirname(os.path.abspath((__file__)))
+        error_log = os.path.join(root_path, "log/errors.log")
         prototxt = os.path.join(root_path, "models/deploy2.prototxt")
         model = os.path.join(root_path, "models/deploy2.caffemodel")
         shape_model = os.path.join(root_path, "models/68_landmarks.dat")
+        haar_xml = os.path.join(root_path, "models/haarcascade_frontalface_default.xml")
         joblist = os.path.join(root_path, str("db/jobs/"+str(self.hash)+".json"))
         img_db = os.path.join(root_path, "db", "img")
         self.paths = {
+            "error_log": error_log,
             "curr_dir" : curr_dir,
             "prototxt" : prototxt,
             "model" : model,
+            "haar_xml" : haar_xml,
             "joblist" : joblist,
             "shape_model" : shape_model,
             "img_db" : img_db
@@ -92,6 +96,7 @@ class Job(object):
         self.purple = (153, 51, 255)
         self.pink = (255, 51, 255)
         self.blue = (255, 153, 51)
+        self.error_log = []
 
     def url_to_image(self, url):
         wbimg = ul.urlopen(url)
@@ -401,6 +406,7 @@ class Job(object):
 
         result_str = None
         result_int = 0
+        #self.error_log.append("ran")
 
 
         ###########################################################
@@ -419,15 +425,14 @@ class Job(object):
         face_net.setInput(blob)
         detections = face_net.forward()
 
+        count = 0;
         for i in range(0, detections.shape[2]):
             confidence = detections[0, 0, i, 2]
             if confidence > self.confidence:
 
-                # multiple face warning!!!! --> if detections.shape[2] !=
-                count = 0;
-                if count > 0:
-                    print("[ERROR] NO OR MULTIPLE FACES DETECTED IN IMAGE")
-                    print("[INFO] cancelling job")
+                # multiple face warning!!!! --> if detections.shape[2] != 0
+                if count > 1:
+                    self.error_log.append("[ERROR] NO OR MULTIPLE FACES DETECTED IN IMAGE")
 
                 else:
                     box = detections[0, 0, i, 3:7] * np.array([width, height, width,
@@ -438,7 +443,7 @@ class Job(object):
                     for a in np_int_array:
                         int32_array.append(int(a))
                     self.json_obj["face_coord"] = int32_array
-
+                    self.error_log.append("[INFO] CNN RAN SUCCESSFULLY")
                     count += 1
 
         ###########################################################
@@ -448,6 +453,29 @@ class Job(object):
                                    int32_array[1],
                                    int32_array[2],
                                    int32_array[3])
+
+        # Haar cascade is used as a safeguard
+        if count != 1:
+            face_cascade = cv2.CascadeClassifier(self.paths["haar_xml"])
+            faces_detect = face_cascade.detectMultiScale(image,
+                                                         scaleFactor=1.1,
+                                                         minSize=(100,100),
+                                                         maxSize=(500,500),
+                                                         flags=cv2.CASCADE_SCALE_IMAGE)
+            # let user know of multiple faces detected in one image
+            if len(faces_detect) > 1:
+                self.error_log.append("[ERROR] {} FACES DETECTED IN {}".format(len(faces_detect), self.json_obj["hash"]))
+
+            else:
+                pass
+
+            x1, y1, w, h = faces_detect[0]
+            x2 = x1 + w
+            y2 = y1 + h
+
+            dlib_rect = dlib.rectangle(x1, y1, x2, y2)
+            self.error_log.append("[INFO] HAAR CASCADE RAN SUCCESSFULLY")
+
         predictor = dlib.shape_predictor(self.paths["shape_model"])
 
         landmarks = predictor(image, dlib_rect).parts()
@@ -502,6 +530,10 @@ class Job(object):
         if not os.path.isfile(self.paths["joblist"]):
             with open(self.paths["joblist"], "w") as outfile:
                 json.dump(self.json_obj, outfile)
+
+        with open(self.paths["error_log"], 'w') as f:
+            for err in self.error_log:
+                f.write("%s\n" % err)
 
         return result_str
 

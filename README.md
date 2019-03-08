@@ -57,6 +57,7 @@ TODO
 - [x] draw, save and display resulting image
 - [x] tests for jobs.py, linear.py
 - [ ] refactor whole backend api
+- [ ] haar cascade instead of convnet for images with close framed faces
 - [ ] documentation generation with sphinx and RTD hosting
 - [ ] travisCI
 - [x] deployment on heroku

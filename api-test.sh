@@ -7,7 +7,7 @@ echo "[INFO] local host api call"
 curl -s -g -i -H Content-Type:application/json -X POST -d  \
 	'{"image":"http://optipng.sourceforge.net/pngtech/img/lena.png",
 	"analysis":"asym"}' \
-	http://localhost:5000/api/v0.0/jobs/new > local_api_test.log
+	http://localhost:5000/api/v0.0/jobs/new > log/local_api_test.log
 
 if [ $? -eq 0 ];
 then
@@ -23,7 +23,7 @@ curl -s -g -i -H Content-Type:application/json -X POST -d \
 	'{"image":"http://optipng.sourceforge.net/pngtech/img/lena.png",
 	"analysis":"asym"}' \
 	https://stormy-hollows-38428.herokuapp.com/api/v0.0/jobs/new \
-	> server_api_test.log
+	> log/server_api_test.log
 
 if [ $? -eq 0 ];
 then

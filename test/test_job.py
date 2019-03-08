@@ -26,9 +26,12 @@ class TestJob(object):
     None
     """
 
+
+
     @pytest.fixture
-    def image_setup_asym(self):
-        sample_job = job.Job("http://optipng.sourceforge.net/pngtech/img/lena.png", "asym")
+    def image_setup_asym(img_str):
+        image_urls =["https://res.cloudinary.com/densysorg/image/upload/v1551965839/jzp1tu2wssqwcbrlw5z3.jpg", "http://optipng.sourceforge.net/pngtech/img/lena.png"]
+        sample_job = job.Job(image_urls[1], "asym")
         return sample_job
 
     @pytest.fixture
@@ -49,6 +52,13 @@ class TestJob(object):
     def image_setup_ratio3(self):
         sample_job = job.Job("http://optipng.sourceforge.net/pngtech/img/lena.png", "ratio3")
         return sample_job
+
+# find proper test to determine functionality of the face detection algorithms
+#    def test_face_detect(self, image_setup_asym):
+#        sample_job = image_setup_asym
+#        sample_job.execute
+#        assert len(sample_job.error_log) == 0
+#        assert sample_job.json_obj["face_coord"] != []
 
     def test_init(self, image_setup_asym):
         sample_job = image_setup_asym
