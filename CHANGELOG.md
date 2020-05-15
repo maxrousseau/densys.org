@@ -7,8 +7,12 @@ and medical fields.
 
 ## TODO
 
-- mailing list
-- favicon
-- recruit more projects
-- member registration
-- discussion board
+- [ ] pytest
+- [ ] favicon
+- [ ] recruit more projects
+
+Feature implementation:
+
+- [ ] member registration
+- [ ] mailing list
+- [ ] discussion board
