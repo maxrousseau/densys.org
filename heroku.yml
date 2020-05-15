@@ -2,4 +2,4 @@ build:
   docker:
     web: Dockerfile
 run:
-  web: waitress-serve --call 'densys:create_app'
+  web: waitress-serve --port=$PORT --call 'densys:create_app'
