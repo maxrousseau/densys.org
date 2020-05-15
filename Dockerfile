@@ -5,7 +5,7 @@ FROM python:3.7-slim-stretch
 RUN apt-get update && apt-get install -y \
 	gcc \
 	build-essential \
-	pkg-config \
+	pkg-config
 
 # set working directory to /app
 WORKDIR /app
