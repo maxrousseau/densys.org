@@ -6,6 +6,9 @@
 DENSYS.ORG
 ==========
 
+[![Build
+Status](https://travis-ci.org/maxrousseau/densys.org.svg?branch=master)](https://travis-ci.org/maxrousseau/densys.org)
+
 This is the repository of the densys.org platform.
 
 Contribute
