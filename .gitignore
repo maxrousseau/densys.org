@@ -16,6 +16,9 @@
 db/
 uploads/
 
-# ide crap
+# coverage
+.coverage
+
+# ide stuff
 .idea/
 

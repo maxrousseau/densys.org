@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<img src="{{ url_for('static', filename='densyslogo.svg') }}" 
+  alt="logo" width="300">
+
+<h2>Mission Statement</h2>
+
+<p>
+Densys aims at bringing machine learning technologies to the researcher and
+clinicians in various dental and medical fields. We are a group of
+researchers, clinicians and developpers actively involved in findings modern
+solutions to clinical problems and making them openly available to the public.
+</p>
+
+{% endblock %}

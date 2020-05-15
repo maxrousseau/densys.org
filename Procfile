@@ -1,1 +1,1 @@
-web: gunicorn wgsi --log-file -
+web: waitress-serve --call 'densys:create_app'

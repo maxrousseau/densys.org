@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+
+<h2>Featured Projects</h2>
+
+<p>
+The following is a list of open source software projects that have been used in
+scientific research.
+</p>
+
+<div id=showcase_wrapper>
+
+
+<div id=showcase_img>
+<a id=proj_link href="{{ url_for('views.vw_proj_pfla') }}">
+<img src="{{ url_for('static', filename='proj_media/logo-pfla.png') }}"
+  alt="mrousseau" width="80">
+</a>
+</div>
+
+<div id=showcase_item>
+<a id=proj_link href="{{ url_for('views.vw_proj_pfla') }}">
+<b>PFLA: Python Facial Landmark analysis.</b><i> Automating facial analysis using deep
+learning models.</i>
+</a>
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,7 +1,4 @@
 Flask
-flask-cors
-numpy
-opencv-python
-opencv-contrib-python
-dlib
-gunicorn
+waitress
+pytest
+coverage

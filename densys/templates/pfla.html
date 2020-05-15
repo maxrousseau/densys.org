@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}pfla{% endblock %}
+
+{% block content %}
+
+
+<h2>PFLA: Python Facial Landmark Analysis</h2>
+
+<div id=proj_meta>
+
+<img src="{{ url_for('static', filename='proj_media/logo-pfla.png') }}"
+  alt="pfla-logo" width="200">
+
+<ul class=proj_info>
+<li id=meta_list><b>Author:</b> Maxime Rousseau</li>
+<li id=meta_list><b>License:</b> MIT</li>
+<li id=meta_list><b>Version:</b> 1.0.0</li>
+<li id=meta_list><b>Source:</b><a id=repo
+href='https://github.com/maxrousseau/pfla'> Github</a></li>
+</ul>
+
+</div>
+
+<h3>Description</h3>
+
+<p>
+This project came to be due to a need for automating the image annotation
+process to be able to compare the faces of various subjects samples and compare
+them. Traditionally such project would require training of the multiple
+scientists to annotate images and use kappa scores to ensure that these
+annotations were valid amongst the investigators. This is quite cumbersome,
+prone to bias and slow for large datasets. Hence, the need for automation of
+this process.
+</p>
+
+<p>
+Densys makes use of pre-trained machine learning models to accomplish this task
+of annotating faces with landmarks. There are two model implementations
+required to do so: a face detector and a face annotator. For facial detection
+we used MTCNN (Multi-Task Convolutional Neural Network) and for annotation FAN
+(Face Alignment Network).
+</p>
+
+
+<img src="{{ url_for('static', filename='proj_media/pfla-fig.png') }}"
+  alt="pfla-figure" width="600">
+
+<p>
+The program extracts the face bounding box, 68 landmarks and computes facial
+metrics for a single image or a folder containing multiple images (i.e. a
+sample/group). It outputs the results to a file of the user's choice (csv, xlsx,
+hdf5, pkl). This allows to conduct statistical analysis with his platform of
+choice (Excel, R, Matlab, Python, etc.)
+</p>
+
+<h3>Publications</h3>
+
+<p>Rousseau et al., (2018). pfla: A Python Package for Dental Facial Analysis
+using Computer Vision and Statistical Shape Analysis. Journal of Open Source
+Software, 3(32), 855, <a href='https://doi.org/10.21105/joss.00855'>
+https://doi.org/10.21105/joss.00855</a>
+</p>
+
+
+<h3>Access</h3>
+
+<p>
+The source code of this project is hosted on <a
+href='https://github.com/maxrousseau/pfla'>github</a>. You can read the
+documentation which covers it's usage and inner workings <a
+href='https://pfla.readthedocs.io/en/master/?badge=master'>here</a>.
+</p>
+
+
+{% endblock %}

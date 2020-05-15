@@ -1,0 +1,197 @@
+/* Densys palette
+*
+* #eae9f1 pale
+* #bcb9d3
+* #918cb6
+* #746f91
+* #484558 dark
+*
+*/
+
+head {
+}
+
+h1 {
+	color: #484558;
+	font-size: 1.5em;
+	padding: 0;
+	margin: 0;
+	text-align: left;
+	text-decoration: None;
+}
+
+h2 {
+	color: #484558;
+	font-size: 1.2em;
+	text-align: left;
+	text-decoration: None;
+	margin-left: 12%;
+}
+
+nav {
+	clear: both;
+	overflow: hidden;
+	color: #069;
+	background-color: #bcb9d3;
+	padding: 0.3ex;
+	font-size: 1em;
+	text-align: center;
+}
+
+a {
+	color: #484558;
+	text-decoration: none;
+}
+
+a:hover {
+	background-color: #eae9f1;
+}
+
+#proj_link{
+	text-decoration: none;
+}
+
+#proj_link:hover{
+	text-decoration: none;
+	background-color: #bcb9d3;
+}
+
+ul.proj_info {
+	text-decoration: none;
+	list-style: square;
+}
+
+ul.proj_pub {
+	list-style: square;
+	list-style-position: outside;
+	margin-left: 15%;
+	margin-right:15%;
+}
+
+#pub_list{
+	text-decoration: none;
+	padding: 0;
+	display: block;
+	text-align: justify;
+}
+
+#proj_meta{
+	display: grid;
+	grid-auto-columns: minmax(50px,auto);
+	grid-auto-rows: minmax(50px,auto);
+	grid-gap: 10px;
+	grid-template-areas:
+		" pim pif ";
+	margin-left: 20%;
+	margin-right: 20%;
+	align-items: center;
+}
+
+#proj_image{
+	grid-area: pim;
+}
+
+#proj_info{
+	grid-area: pif;
+}
+
+#meta_list{
+	text-decoration: none;
+	padding: 0;
+	display: block;
+	text-align: right;
+}
+
+li {
+	color: #484558;
+	text-decoration: none;
+	padding-left: 0.20em;
+	padding-right: 0.20em;
+	padding-top: 0.35em;
+	padding-bottom: 0.45em;
+	display: inline;
+}
+
+li:hover {
+	background-color: #eae9f1;
+}
+
+p {
+	text-align: justify;
+	margin-left: 15%;
+	margin-right:15%;
+}
+
+body {
+	background-color: #eae9f1; /*pale blue*/
+	color: #746f91; /*dark blue*/
+	font-family: Verdana, Geneva, sans-serif;
+	margin-top: 3%;
+	margin-left: 10%;
+	margin-right: 10%;
+	text-align: center;
+}
+
+footer {
+	clear: both;
+	color: #666;*/
+	border-top: 1px solid #ccc;
+	font-size: 0.8em;
+	padding: 1em;
+	margin: 0 0 1.5em 0;
+	text-align: left;
+}
+
+#team_wrapper{
+	display: grid;
+	grid-auto-columns: minmax(50px,auto);
+	grid-auto-rows: minmax(50px,auto);
+	grid-gap: 10px;
+	grid-template-areas:
+		" im bi bi bi ";
+	margin-left: 15%;
+	margin-right: 15%;
+	align-items: center;
+}
+
+#member_pic{
+	grid-area: im;
+}
+
+
+#member_bio{
+	grid-area: bi;
+	text-align: left;
+}
+
+#showcase_wrapper{
+	display: grid;
+	grid-auto-columns: minmax(50px,auto);
+	grid-auto-rows: minmax(50px,auto);
+	grid-gap: 10px;
+	grid-template-areas:
+		" im it it it ";
+	margin-left: 10%;
+	margin-right: 10%;
+	align-items: center;
+	border: 2px solid #746f91;
+	border-radius: 5px;
+}
+
+#showcase_wrapper:hover{
+	background-color: #bcb9d3;
+	border: None;
+	color: #484558;
+	border: 2px solid #bcb9d3;
+	border-radius: 5px;
+}
+
+#showcase_img{
+	grid-area: im;
+}
+
+
+#showcase_item{
+	grid-area: it;
+	text-align: left;
+}
