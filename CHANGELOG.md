@@ -7,12 +7,16 @@ and medical fields.
 
 ## TODO
 
-- [ ] pytest
+Devops:
+
+- [ ] pytest, improve testing coverage
 - [ ] favicon
-- [ ] recruit more projects
+- [ ] flake8 refactoring
+
 
 Feature implementation:
 
 - [ ] member registration
 - [ ] mailing list
 - [ ] discussion board
+- [ ] recruit more projects

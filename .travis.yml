@@ -1,0 +1,12 @@
+os: linux
+dist: bionic
+language: python
+install: pip install .
+script:
+  - pip install -U pip
+  - pip install flake8
+  - pip install -r  requirements.txt --upgrade --force-reinstall
+#  - flake8 pfla, will fix flake8 issues locally first
+  - pytest -v
+  - coverage run -m pytest
+  - coverage report
