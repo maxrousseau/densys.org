@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8"/>
+  <title>densys - {% block title %}{% endblock %}</title>
+  <link href="{{ url_for('static', filename='style.css') }}" rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+<h1>
+<a id="headerLink"
+	href="{{ url_for('views.vw_home') }}">
+	densys.org
+</a>
+</h1>
+
+<nav id="menu">
+	   <li><a id="nav_link" href="{{ url_for('views.vw_news') }}">news</a></li>
+	   <li><a id="nav_link" href="{{ url_for('views.vw_about') }}">about</a></li>
+	   <li><a id="nav_link" href="{{ url_for('views.vw_projects') }}">projects</a></li>
+</nav>
+
+  {% block content %}{% endblock %}
+
+<footer>
+  <hr>
+  <span class="right"> &copy; 2020 densys.org | Maxime Rousseau </span>
+</footer>
+
+</body>
+

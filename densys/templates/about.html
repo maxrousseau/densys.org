@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}About{% endblock %}
+
+{% block content %}
+
+
+<h2>Purpose</h2>
+
+<p>
+The digital age brings with it new opportunities for the dental and medical
+fields. Complex data types often requires software to allow researchers to better
+understand underlying phenomena. Scientific computing has become ubiquitous in
+most fields studying nature. Hence, the importance of open source software in
+reasearch has grown considerably.
+</p>
+
+
+<p>
+Just like the large archives of scientific papers we wish to create a platform
+to highlight and promote useful open source projects aimed at scientific
+discovery.
+</p>
+
+<p>
+Densys presents projects submitted by researchers with the objective of
+increasing accessibility to and visibility for scientists.
+</p>
+
+<p>
+We accept a wide variety of projects, from machine learning models, databases
+to scripts or fully featured software projects. For more information, on how to
+contribute your work to Densys see the contributing section.
+</p>
+
+<h2>Contributing</h2>
+
+<p>
+Submiting your software is quite simple. We ask that a short article be written
+to describe what the software does, the publications or posters that are
+associted with it and information on how to get the software. Please send this
+information via email to the this <a href="mailto:maximerousseau08@gmail.com">
+address</a>.
+</p>
+
+<h2>Team</h2>
+
+<div id=team_wrapper>
+
+<div id=member_pic>
+<img src="{{ url_for('static', filename='mrousseau.png') }}"
+  alt="mrousseau" width="80">
+</div>
+
+<div id=member_bio>
+<b>Maxime Rousseau, DMD:</b> developper of the pfla python package and densys.org.
+</div>
+
+</div>
+
+{% endblock %}
